@@ -1,46 +1,244 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة الألعاب الجماعية 🎮</title>
-  <link rel="stylesheet" href="style.css">
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fulla | فُلّة - منصة الألعاب الجماعية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin: 30px 0 20px;
+    }
+
+    /* تصميم لوقو "فُلّة | Fulla" */
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 2px solid rgba(236, 72, 153, 0.5);
+      padding: 12px 30px;
+      border-radius: 50px;
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-icon {
+      font-size: 2.3rem;
+      animation: pulseGlow 1.8s infinite alternate;
+    }
+
+    .brand-text {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 4px rgba(236, 72, 153, 0.5)); }
+      100% { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.9)); }
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.15rem;
+    }
+
+    .games-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      max-width: 1000px;
+      width: 100%;
+      margin-top: 25px;
+    }
+
+    .game-card {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 20px;
+      padding: 25px;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      border-color: #ec4899;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25);
+    }
+
+    .game-icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+    }
+
+    .game-title {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      color: #f8fafc;
+    }
+
+    .game-desc {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .btn-play {
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-play:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    .how-to-play {
+      margin-top: 50px;
+      max-width: 800px;
+      text-align: center;
+      background: rgba(30, 41, 59, 0.5);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #334155;
+    }
+
+    .how-to-play h2 {
+      margin-bottom: 20px;
+      color: #ec4899;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .step {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .step-num {
+      background: #ec4899;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 30px 0 10px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
 
-  <div class="main-container home-container">
-    <header class="platform-header">
-      <span class="logo-icon">🎮</span>
-      <h1>منصة الألعاب الجماعية</h1>
-      <p class="subtitle">اختر اللعبة وابدأ الحماس مع أصدقائك مباشرة!</p>
-    </header>
+  <header>
+    <div class="brand-logo">
+      <span class="brand-icon">🎉✨</span>
+      <span class="brand-text">فُلّة | Fulla</span>
+    </div>
+    <p>جمعاتكم ومنافساتكم تصير أحلى وفُلّة أونلاين!</p>
+  </header>
 
-    <!-- قائمة بطاقات الألعاب -->
-    <div class="games-grid">
-      
-      <!-- بطاقة لعبة العجلة -->
-      <div class="game-card" onclick="location.href='wheel.html'">
-        <div class="card-icon">🎡</div>
-        <h2>عجلة القرارات</h2>
-        <p>أدر العجلة لاتخاذ قرارات عشوائية وإضافة التحديات والأسماء.</p>
-        <button class="play-btn">لعب الآن 🚀</button>
+  <main class="games-container">
+    <!-- لعبة خارج السالفة -->
+    <div class="game-card">
+      <div>
+        <div class="game-icon">🕵️‍♂️</div>
+        <h2 class="game-title">خارج السالفة</h2>
+        <p class="game-desc">مين اللكاع اللي ما يدري وش السالفة؟ اكتشفوا الخائن بينكم قبل ما يفوز!</p>
       </div>
-
-      <!-- بطاقة لعبة خارج السالفة -->
-      <div class="game-card" onclick="location.href='liar.html'">
-        <div class="card-icon">🕵️‍♂️</div>
-        <h2>خارج السالفة</h2>
-        <p>اكتشف اللاعب الكذاب الذي لا يعرف الكلمة السرية من خلال التلميحات!</p>
-        <button class="play-btn">لعب الآن 🚀</button>
-      </div>
-
+      <a href="liar.html" class="btn-play">ابدأ اللعب</a>
     </div>
 
-    <footer class="platform-footer">
-      <p>جاهز لتجربة ألعاب أكثر؟ قريباً نظام الغرف والتفاعل أونلاين 🌐</p>
-    </footer>
-  </div>
+    <!-- العجلة العشوائية -->
+    <div class="game-card">
+      <div>
+        <div class="game-icon">🎡</div>
+        <h2 class="game-title">العجلة العشوائية</h2>
+        <p class="game-desc">مُحتارين مين يبدأ؟ أو مين عليه العقاب؟ دوروا العجلة واخلوا القرار للقدر!</p>
+      </div>
+      <a href="wheel.html" class="btn-play">تدوير العجلة</a>
+    </div>
+
+    <!-- لعبة الكلمة المفقودة -->
+    <div class="game-card">
+      <div>
+        <div class="game-icon">🧩</div>
+        <h2 class="game-title">الكلمة المفقودة</h2>
+        <p class="game-desc">خمن الكلمة المفقودة التي تكمل المعنى بأسرع وقت واجمع النقاط!</p>
+      </div>
+      <a href="missing-word.html" class="btn-play">ابدأ التحدي</a>
+    </div>
+  </main>
+
+  <section class="how-to-play">
+    <h2>كيف تبدأ اللعب؟ 🤔</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <p>اختر اللعبة واضغط زر الدخول</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p>أنشئ غرفة وشارِك الكود مع أصحابك</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>ادخلوا من الجوالات واستمتعوا بالفُلّة!</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>منصة فُلّة | Fulla 🚀 | صُممت بحب للأوقات الممتعة</p>
+  </footer>
 
 </body>
 </html>

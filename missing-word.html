@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fulla | الكلمة المفقودة 🧩</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+    body { background: #0f172a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    
+    .game-card { background: #1e293b; border: 2px solid #ec4899; border-radius: 20px; padding: 30px; width: 100%; max-width: 480px; text-align: center; box-shadow: 0 0 25px rgba(236, 72, 153, 0.25); }
+    h1 { color: #ec4899; font-size: 2.2rem; font-weight: 900; margin-bottom: 5px; }
+    p.sub { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+    .timer-score { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; }
+    .timer { background: #334155; color: #fbbf24; padding: 6px 16px; border-radius: 20px; }
+    .score { background: #334155; color: #34d399; padding: 6px 16px; border-radius: 20px; }
+
+    .puzzle-box { background: #0f172a; border: 2px dashed #8b5cf6; border-radius: 15px; padding: 25px; margin-bottom: 20px; }
+    .emoji-display { font-size: 3.5rem; margin-bottom: 15px; }
+    .hint-text { color: #38bdf8; font-size: 1.3rem; font-weight: bold; line-height: 1.4; }
+
+    input[type="text"] { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #334155; background: #0f172a; color: #fff; font-size: 1.1rem; text-align: center; margin-bottom: 15px; outline: none; transition: border-color 0.3s; }
+    input[type="text"]:focus { border-color: #ec4899; }
+
+    .btn-group { display: flex; gap: 10px; }
+    .btn { flex: 2; background: linear-gradient(45deg, #ec4899, #8b5cf6); color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: opacity 0.2s; }
+    .btn-skip { flex: 1; background: #334155; color: #94a3b8; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    .btn:hover, .btn-skip:hover { opacity: 0.9; }
+
+    .result-msg { margin-top: 15px; font-weight: bold; min-height: 25px; font-size: 1.1rem; }
+    
+    .back-link { display: inline-block; margin-top: 20px; color: #64748b; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <div class="game-card">
+    <h1>الكلمة المفقودة 🧩</h1>
+    <p class="sub">خمن الكلمة التي تكمل الجملة أو المعنى!</p>
+
+    <div class="timer-score">
+      <div class="timer">⏳ الوقت: <span id="time">20</span>s</div>
+      <div class="score">🏆 النقاط: <span id="score">0</span></div>
+    </div>
+
+    <div class="puzzle-box">
+      <div id="emojis" class="emoji-display">📜✍️</div>
+      <div id="hint" class="hint-text">العلم نور و الجهل ____</div>
+    </div>
+
+    <input type="text" id="answerInput" placeholder="اكتب الكلمة المفقودة..." autocomplete="off" />
+    
+    <div class="btn-group">
+      <button class="btn" onclick="checkAnswer()">تأكيد الإجابة 🚀</button>
+      <button class="btn-skip" onclick="skipPuzzle()">تخطي ⏩</button>
+    </div>
+
+    <div id="result" class="result-msg"></div>
+    <a href="index.html" class="back-link">← العودة للرئيسية</a>
+  </div>
+
+  <script>
+    const puzzles = [
+      { emojis: "📜✍️", hint: "العلم نور والجهل _____", answer: "ظلام" },
+      { emojis: "☕🧊", hint: "آيس _____", answer: "كافيه" },
+      { emojis: "🔑🏠", hint: "الحاجة أم _____", answer: "الاختراع" },
+      { emojis: "🏃‍♂️⏱️", hint: "الوقت كـ ____ إن لم تقطعه قطعك", answer: "السيف" },
+      { emojis: "🦁👑", hint: "الأسد ملك _____", answer: "الغابة" },
+      { emojis: "🌧️🌱", hint: "الصبر مفتاح _____", answer: "الفرج" },
+      { emojis: "🦅☁️", hint: "الطير يطير بـ _____", answer: "جناحيه" }
+    ];
+
+    let currentStep = 0;
+    let score = 0;
+    let timeLeft = 20;
+    let timerInterval;
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeLeft = 20;
+      document.getElementById('time').innerText = timeLeft;
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('time').innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById('result').innerText = "❌ انتهى الوقت!";
+          document.getElementById('result').style.color = "#f43f5e";
+          setTimeout(nextPuzzle, 1500);
+        }
+      }, 1000);
+    }
+
+    function loadPuzzle() {
+      const p = puzzles[currentStep];
+      document.getElementById('emojis').innerText = p.emojis;
+      document.getElementById('hint').innerText = p.hint;
+      document.getElementById('answerInput').value = "";
+      document.getElementById('result').innerText = "";
+      startTimer();
+    }
+
+    function checkAnswer() {
+      const userAns = document.getElementById('answerInput').value.trim();
+      const currentAns = puzzles[currentStep].answer;
+
+      if (userAns === currentAns) {
+        clearInterval(timerInterval);
+        score += 10;
+        document.getElementById('score').innerText = score;
+        document.getElementById('result').innerText = "🎉 إجابة صحيحة! بطل!";
+        document.getElementById('result').style.color = "#34d399";
+        setTimeout(nextPuzzle, 1500);
+      } else {
+        document.getElementById('result').innerText = "❌ إجابة خاطئة، حاول ثانية!";
+        document.getElementById('result').style.color = "#f43f5e";
+      }
+    }
+
+    function skipPuzzle() {
+      clearInterval(timerInterval);
+      document.getElementById('result').innerText = "تم التخطي! الكلمة هي: " + puzzles[currentStep].answer;
+      document.getElementById('result').style.color = "#38bdf8";
+      setTimeout(nextPuzzle, 1800);
+    }
+
+    function nextPuzzle() {
+      currentStep = (currentStep + 1) % puzzles.length;
+      loadPuzzle();
+    }
+
+    // السماح بضغط Enter للتأكيد
+    document.getElementById('answerInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+
+    loadPuzzle();
+  </script>
+</body>
+</html>
