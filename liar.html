@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة خارج السالفة 🕵️‍♂️</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- استدعاء مكتبة Socket.io للربط أونلاين -->
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <div class="main-container">
+    <a href="index.html" class="back-home-btn">🏠 العودة للرئيسية</a>
+
+    <h1>🕵️‍♂️ لعبة خارج السالفة (أونلاين)</h1>
+    <p class="subtitle">من هو اللاعب الذي لا يعرف السالفة؟</p>
+
+    <!-- 1. الشاشة الرئيسية: اختيار هل أنت مضيف أم لاعب من الجوال -->
+    <div id="modeSelectStep" class="game-step">
+      <button onclick="showHostSetup()" style="width: 100%; margin-bottom: 12px; background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+        📺 إنشاء غرفة (شاشة المضيف)
+      </button>
+      <button onclick="showJoinSetup()" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669);">
+        📱 الانضمام لغرفة (من الجوال)
+      </button>
+    </div>
+
+    <!-- 2. إعداد المضيف (إنشاء الغرفة) -->
+    <div id="hostSetupStep" class="game-step hidden">
+      <div id="roomCodeDisplay" style="background: #0f172a; border: 2px dashed #38bdf8; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+        <span style="color: #94a3b8; font-size: 14px;">كود الغرفة للانضمام:</span>
+        <h2 id="generatedCodeText" style="color: #facc15; font-size: 28px; letter-spacing: 2px;">---</h2>
+      </div>
+
+      <div class="category-select">
+        <label>التصنيف:</label>
+        <select id="categorySelect">
+          <option value="food">🍔 أطعمة ومأكولات</option>
+          <option value="cities">🏙️ مدن ومناطق</option>
+          <option value="cars">🏎️ سيارات ومركبات</option>
+        </select>
+      </div>
+
+      <div style="margin-top: 15px; text-align: right;">
+        <h4 style="color: #38bdf8; margin-bottom: 8px;">اللاعبون المنضمون:</h4>
+        <ul id="connectedPlayersList" class="options-list"></ul>
+      </div>
+
+      <button id="startServerGameBtn" onclick="startOnlineGame()" style="margin-top: 20px; width: 100%;">بدء اللعبة وتوزيع الأدوار 🚀</button>
+    </div>
+
+    <!-- 3. شاشة إدخال اللاعب (من الجوال) -->
+    <div id="joinSetupStep" class="game-step hidden">
+      <div class="input-group" style="flex-direction: column; gap: 10px;">
+        <input type="text" id="joinRoomCodeInput" placeholder="أدخل كود الغرفة (مثال: 4812)">
+        <input type="text" id="joinPlayerNameInput" placeholder="اكتب اسمك...">
+        <button onclick="joinRoomAction()" style="width: 100%;">انضمام للغرفة 📲</button>
+      </div>
+    </div>
+
+    <!-- 4. شاشة انتظار اللاعب في الجوال -->
+    <div id="playerWaitingStep" class="game-step hidden">
+      <h3 style="color: #4ade80;">تم الانضمام بنجاح! ✅</h3>
+      <p style="color: #94a3b8; margin-top: 10px;">بانتظار المضيف لبدء اللعبة...</p>
+    </div>
+
+    <!-- 5. شاشة عرض السر في الجوال -->
+    <div id="playerRoleStep" class="game-step hidden">
+      <h3>سرّك الخاص 🔒</h3>
+      <div id="playerRoleCard" class="card-box" style="margin-top: 15px;">
+        <span id="playerRoleText">جاري تحميل السر...</span>
+      </div>
+      <p style="font-size: 12px; color: #94a3b8;">احرص على ألا يرى أحد شاشتك!</p>
+    </div>
+
+    <!-- 6. شاشة كشف النتيجة النهائية -->
+    <div id="resultStep" class="game-step hidden">
+      <h3 style="color: #38bdf8;">النتيجة النهائية 🎉</h3>
+      <div class="result-card">
+        <p>🔴 الكذاب (خارج السالفة) هو: <strong id="liarNameText" style="color: #ef4444; font-size: 20px;">---</strong></p>
+        <p style="margin-top: 10px;">🟢 الكلمة السرية كانت: <strong id="secretWordText" style="color: #4ade80; font-size: 20px;">---</strong></p>
+      </div>
+      <button onclick="location.reload()" style="margin-top: 20px; width: 100%;">لعبة جديدة 🔄</button>
+    </div>
+
+  </div>
+
+  <script src="liar.js"></script>
+</body>
+</html>

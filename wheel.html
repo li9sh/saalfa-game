@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عجلة القرارات والتحديات 🎡</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="main-container">
+    <!-- زر العودة للرئيسية -->
+    <a href="index.html" class="back-home-btn">🏠 العودة للرئيسية</a>
+
+    <h1>🎡 عجلة القرارات والتحديات</h1>
+    <p class="subtitle">أضف خياراتك الخاصة، أدر العجلة واكتشف الفائز!</p>
+
+    <!-- منطقة العجلة والسهم -->
+    <div class="wheel-box">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <!-- زر التدوير -->
+    <button id="spinBtn" onclick="spinWheel()">أدر العجلة 🚀</button>
+
+    <!-- صندوق نتيجة الفائز -->
+    <div id="resultBox" class="result-box hidden">
+      <span>🎉 الخيار الفائز هو:</span>
+      <h2 id="resultText">---</h2>
+    </div>
+
+    <!-- قسم إدارة الخيارات والأسماء -->
+    <div class="controls-section">
+      <h3>📝 إدارة الخيارات</h3>
+      <div class="input-group">
+        <input type="text" id="optionInput" placeholder="اكتب خياراً أو اسماً جديداً..." onkeypress="handleKeyPress(event)">
+        <button onclick="addOption()">إضافة ➕</button>
+      </div>
+      <ul id="optionsList" class="options-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

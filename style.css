@@ -1,0 +1,339 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background: #0f172a;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* تغيير المحاذاة لعدم قص الجزء العلوي */
+    min-height: 100vh;
+    padding: 40px 15px; /* مساحة علوية وسفلية مريحة */
+    overflow-y: auto; /* السماح بالتمرير في الشاشات الصغيرة */
+  }
+  
+  .main-container {
+    text-align: center;
+    background: #1e293b;
+    padding: 25px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 100%;
+    margin: auto 0;
+  }
+  
+  h1 {
+    font-size: 22px;
+    color: #38bdf8;
+    margin-bottom: 6px;
+  }
+  
+  .subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+  }
+  
+  /* ==================== 1. تنسيقات العجلة الدوارة ==================== */
+  .wheel-box {
+    position: relative;
+    width: 320px; /* تصغير طفيف ليتناسب مع الشاشة بدون قص */
+    height: 320px;
+    margin: 15px auto 20px auto;
+    max-width: 100%;
+  }
+  
+  .pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 24px solid #ef4444;
+    z-index: 10;
+  }
+  
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+  }
+  
+  /* ==================== 2. تنسيقات الأزرار والمدخلات ==================== */
+  button {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+  }
+  
+  button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  }
+  
+  button:disabled {
+    background: #64748b;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .input-group input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .input-group input:focus {
+    border-color: #38bdf8;
+  }
+  
+  .input-group button {
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  /* ==================== 3. قوائم الأسماء والحذف ==================== */
+  .controls-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #334155;
+    text-align: right;
+  }
+  
+  .controls-section h3 {
+    font-size: 15px;
+    color: #38bdf8;
+    margin-bottom: 10px;
+  }
+  
+  .options-list {
+    list-style: none;
+    max-height: 130px;
+    overflow-y: auto;
+    padding-left: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .options-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f172a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  
+  .delete-btn {
+    background: transparent;
+    color: #ef4444;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+  
+  .delete-btn:hover {
+    color: #f87171;
+    background: transparent;
+    transform: scale(1.2);
+  }
+  
+  /* ==================== 4. نتائج وحالات العرض ==================== */
+  .result-box {
+    margin-top: 20px;
+    padding: 12px;
+    background: #334155;
+    border-radius: 12px;
+    border: 2px solid #38bdf8;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .result-box h2 {
+    color: #facc15;
+    font-size: 20px;
+    margin-top: 5px;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* ==================== زر العودة للرئيسية ==================== */
+  .back-home-btn {
+    display: inline-block;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding: 6px 14px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .back-home-btn:hover {
+    color: #38bdf8;
+    border-color: #38bdf8;
+    transform: translateY(-2px);
+  }
+  
+  /* ==================== 5. تنسيقات خاصة بلعبة خارج السالفة ==================== */
+  .game-step {
+    text-align: right;
+  }
+  
+  .category-select {
+    margin-top: 15px;
+    text-align: right;
+  }
+  
+  .category-select label {
+    font-size: 14px;
+    color: #94a3b8;
+  }
+  
+  .category-select select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #fff;
+    border: 1px solid #475569;
+    margin-top: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .card-box {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px dashed #38bdf8;
+    padding: 40px 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #38bdf8;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  
+  .card-box:hover {
+    transform: scale(1.02);
+    border-color: #818cf8;
+  }
+  
+  .result-card {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 15px;
+    text-align: right;
+    line-height: 1.8;
+  }
+  
+  /* ==================== 6. تنسيقات الصفحة الرئيسية ==================== */
+  .home-container {
+    max-width: 700px;
+  }
+  
+  .platform-header .logo-icon {
+    font-size: 45px;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+  }
+  
+  .game-card {
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 16px;
+    padding: 25px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .game-card:hover {
+    transform: translateY(-5px);
+    border-color: #38bdf8;
+    box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+  }
+  
+  .card-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .game-card h2 {
+    font-size: 20px;
+    color: #facc15;
+    margin-bottom: 10px;
+  }
+  
+  .game-card p {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .play-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+  }
+  
+  .platform-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #334155;
+    color: #64748b;
+    font-size: 12px;
+  }
