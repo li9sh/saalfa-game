@@ -286,20 +286,96 @@
       color: #fbbf24;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .grid-two {
-        grid-template-columns: 1fr;
-      }
-      .card-hero, .card-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-      }
-      .play-icon-circle {
-        align-self: flex-end;
-      }
-    }
+    /* Responsive / تجاوب شاشات الجوال */
+@media (max-width: 768px) {
+  /* تعديل الشريط العلوي */
+  .navbar {
+    padding: 12px 16px;
+  }
+  
+  .brand-logo .name {
+    font-size: 1.4rem;
+  }
+
+  .nav-links {
+    display: none; /* إخفاء القائمة لتوفير المساحة */
+  }
+
+  /* تعديل الحاوية الرئيسية */
+  .games-container {
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  /* الكرت الرئيسي العلوي */
+  .card-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 20px;
+    gap: 15px;
+  }
+
+  .card-badge {
+    position: static; /* إعادة التموضع لعدم تغطية النص */
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+  }
+
+  .card-content h2 {
+    font-size: 1.6rem;
+  }
+
+  .card-content p {
+    font-size: 0.95rem;
+  }
+
+  /* الشبكات والكروت المتوسطة */
+  .grid-two {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .card-medium {
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .card-medium h3 {
+    font-size: 1.3rem;
+  }
+
+  .card-top-row {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+
+  /* كرت الموسوعة السفلي */
+  .card-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 20px;
+    gap: 15px;
+  }
+
+  .badge-bottom {
+    position: static;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .card-bottom h2 {
+    font-size: 1.5rem !important;
+  }
+
+  /* محاذاة أزرار الأيقونات */
+  .play-icon-circle {
+    align-self: flex-end;
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+}
   </style>
 </head>
 <body>
