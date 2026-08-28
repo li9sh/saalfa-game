@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فُلّة | Fulla - منصة ألعاب جماعية وتفاعلية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+    }
+
+    /* --- Navbar (الشريط العلوي) --- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      padding: 6px 18px;
+      border-radius: 40px;
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
+    }
+
+    .brand-logo .icon {
+      font-size: 1.6rem;
+      animation: pulseGlow 1.8s infinite alternate;
+    }
+
+    .brand-logo .name {
+      font-size: 1.7rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 4px rgba(236, 72, 153, 0.5)); }
+      100% { transform: scale(1.12) rotate(5deg); filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8)); }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #ec4899;
+      text-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-outline {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: #8b5cf6;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      gap: 40px;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .hero-content {
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(45deg, #ec4899, #8b5cf6, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+    }
+
+    .hero-subtitle {
+      color: #38bdf8;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-desc {
+      color: #94a3b8;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-main {
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-action-main:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(236, 72, 153, 0.6);
+    }
+
+    .btn-action-sec {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-action-sec:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .btn-rank {
+      background: linear-gradient(45deg, #f59e0b, #d97706);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+      transition: transform 0.2s;
+    }
+
+    .btn-rank:hover {
+      transform: translateY(-2px);
+    }
+
+    /* --- Mockup Card --- */
+    .hero-mockup {
+      flex: 1;
+      max-width: 450px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 2px solid rgba(236, 72, 153, 0.3);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(236, 72, 153, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .room-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #10b981;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .room-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mockup-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .mockup-dots span:nth-child(1) { background: #ef4444; }
+    .mockup-dots span:nth-child(2) { background: #f59e0b; }
+    .mockup-dots span:nth-child(3) { background: #10b981; }
+
+    .question-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .question-tag {
+      color: #ec4899;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #f8fafc;
+    }
+
+    .answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .answer-opt {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .answer-opt.active {
+      border-color: #ec4899;
+      background: rgba(236, 72, 153, 0.1);
+    }
+
+    .answer-opt span {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    .players-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .player-score {
+      color: #f59e0b;
+      font-weight: 900;
+      font-size: 0.9rem;
+    }
+
+    /* Floating WhatsApp Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #25d366;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+      z-index: 1000;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+      }
+
+      .hero-subtitle {
+        justify-content: center;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-title {
+        font-size: 2.3rem;
+      }
+      
+      .hero-mockup {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (الشريط العلوي) -->
+  <nav class="navbar">
+    <div class="nav-right">
+      <a href="home.html" class="brand-logo">
+        <span class="icon">🎉</span>
+        <span class="name">فُلّة</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="home.html" class="active">الرئيسية</a></li>
+        <li><a href="games.html">الألعاب</a></li>
+        <li><a href="#">دخول غرفة</a></li>
+        <li><a href="#">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+    <div class="nav-left">
+      <a href="#" class="btn-outline">🚪 دخول غرفة</a>
+      <a href="#" class="btn-primary">👤 تسجيل الدخول</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section (القسم الرئيسي) -->
+  <main class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="highlight">منصة ألعاب جماعية وتفاعلية 🎉</span>
+      </h1>
+      <p class="hero-subtitle">✨ لسنا الوحيدين ولكن نسعى للأفضل</p>
+      
+      <p class="hero-desc">
+        سواء كنت تدير جلسة مع أصحابك، تنظم فعاليات عائلية، أو تصنع محتوى تفاعلي للجمهور: منصة فُلّة هي خيارك الأنسب لجمع الحماس، التحديات، والتسلية في مكان واحد!
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="games.html" class="btn-action-main">🎮 استكشف مكتبة الألعاب</a>
+        <a href="#" class="btn-action-sec">⌨️ ادخل كود الغرفة</a>
+        <a href="#" class="btn-rank">🏆 المتصدرين</a>
+      </div>
+    </div>
+
+    <!-- Mockup Preview (معاينة اللعبة) -->
+    <div class="hero-mockup">
+      <div class="mockup-header">
+        <div class="room-badge">غرفة نشطة #4821</div>
+        <div class="mockup-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <span class="question-tag">🕵️‍♂️ لعبة: خارج السالفة</span>
+        <div class="question-text">مين اللكاع اللي ما يدري وش السالفة بيننا؟</div>
+      </div>
+
+      <div class="answers-grid">
+        <div class="answer-opt active"><span>أ</span> أحمد</div>
+        <div class="answer-opt"><span>ب</span> سارة</div>
+      </div>
+
+      <div class="players-list">
+        <div class="player-row">
+          <div class="player-info">👑 عبد الله (المستضيف)</div>
+          <div class="player-score">★ 1500</div>
+        </div>
+        <div class="player-row">
+          <div class="player-info">🎯 محمد</div>
+          <div class="player-score">★ 1200</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- زر واتساب العائم -->
+  <a href="#" class="whatsapp-btn">💬</a>
+
+</body>
+</h
+
+
+
+
+
+
+
+
+
+
+
+
+
+

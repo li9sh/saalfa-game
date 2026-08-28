@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحدي تطابق الصور 👥 | فُلّة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .top-bar {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-back {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .game-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .game-container {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 24px;
+      padding: 20px;
+      width: 100%;
+      max-width: 650px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    /* شاشة الإعداد */
+    .setup-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: right;
+    }
+
+    .input-group label {
+      font-weight: bold;
+      color: #94a3b8;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      background: #0f172a;
+      color: #fff;
+      font-size: 1.1rem;
+      text-align: center;
+      outline: none;
+    }
+
+    .input-box:focus {
+      border-color: #ec4899;
+    }
+
+    .grid-selector {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-choice {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      background: #0f172a;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-choice.active {
+      border-color: #ec4899;
+      background: rgba(236, 72, 153, 0.2);
+      color: #ec4899;
+    }
+
+    .btn-start {
+      margin-top: 15px;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* لوحة النتيجة أثناء اللعب */
+    .teams-board {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .team-card {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px solid #334155;
+      border-radius: 16px;
+      padding: 12px;
+      transition: 0.3s;
+    }
+
+    .team-card.active-turn {
+      border-color: #ec4899;
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+      background: rgba(236, 72, 153, 0.15);
+    }
+
+    .team-name {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #94a3b8;
+      margin-bottom: 5px;
+    }
+
+    .team-score {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #38bdf8;
+    }
+
+    .turn-indicator {
+      margin-bottom: 15px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #ec4899;
+    }
+
+    /* أزرار التحكم باللعبة */
+    .control-tools {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-action {
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-action:hover {
+      background: #475569;
+      border-color: #ec4899;
+    }
+
+    /* شبكة الكروت */
+    .memory-grid {
+      display: grid;
+      gap: 10px;
+      margin: 0 auto;
+    }
+
+    .memory-grid.grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .memory-grid.grid-6 {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .card {
+      background-color: #334155;
+      border-radius: 12px;
+      aspect-ratio: 1;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s;
+      user-select: none;
+    }
+
+    .card.flip {
+      transform: rotateY(180deg);
+    }
+
+    .front-face, .back-face {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+    }
+
+    .front-face {
+      background-color: rgba(56, 189, 248, 0.15);
+      border: 2px solid #38bdf8;
+      transform: rotateY(180deg);
+      font-size: 2rem;
+    }
+
+    .grid-6 .front-face {
+      font-size: 1.4rem;
+    }
+
+    .back-face {
+      background-color: #1e293b;
+      border: 2px solid #ec4899;
+      color: #ec4899;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .grid-6 .back-face {
+      font-size: 1.1rem;
+    }
+
+    #restart-btn {
+      margin-top: 20px;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="index.html" class="btn-back">⬅ الرئيسية</a>
+    <h1 class="game-title">تحدي التطابق 👥</h1>
+  </div>
+
+  <div class="game-container">
+
+    <!-- شاشة إعداد التحدي -->
+    <div id="setup-screen" class="setup-screen">
+      <div class="input-group">
+        <label>اسم الفريق الأول 🔴</label>
+        <input type="text" id="team1-input" class="input-box" value="الفريق 1" />
+      </div>
+
+      <div class="input-group">
+        <label>اسم الفريق الثاني 🔵</label>
+        <input type="text" id="team2-input" class="input-box" value="الفريق 2" />
+      </div>
+
+      <div class="input-group">
+        <label>حجم التحدي (عدد الكروت):</label>
+        <div class="grid-selector">
+          <button type="button" class="btn-choice active" id="btn-16" onclick="selectGridSize(16)">16 كرت (4×4)</button>
+          <button type="button" class="btn-choice" id="btn-36" onclick="selectGridSize(36)">36 كرت (6×6)</button>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="initGame()">ابدأ التحدي الآن 🔥</button>
+    </div>
+
+    <!-- شاشة اللعب -->
+    <div id="play-screen" style="display: none;">
+      <div class="teams-board">
+        <div class="team-card active-turn" id="card-team1">
+          <div class="team-name" id="display-team1">الفريق 1</div>
+          <div class="team-score" id="score-team1">0</div>
+        </div>
+        <div class="team-card" id="card-team2">
+          <div class="team-name" id="display-team2">الفريق 2</div>
+          <div class="team-score" id="score-team2">0</div>
+        </div>
+      </div>
+
+      <div class="turn-indicator" id="turn-indicator">الدور الآن لـ: الفريق 1</div>
+
+      <div class="control-tools">
+        <button class="btn-action" onclick="switchTurnManual()">🔄 تبديل الدور</button>
+        <button class="btn-action" onclick="shuffleUnmatchedCards()">🔀 إعادة خلط الكروت</button>
+      </div>
+
+      <div class="memory-grid" id="game-grid"></div>
+
+      <button id="restart-btn" onclick="showSetup()">تحدي جديد 🔄</button>
+    </div>
+
+  </div>
+
+  <script>
+    // مولد الأصوات التفاعلي دون الحاجة لملفات خارجية
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'flip') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } else if (type === 'match') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.setValueAtTime(600, now + 0.1);
+        osc.frequency.setValueAtTime(800, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(180, now + 0.12);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'victory') {
+        const notes = [400, 500, 600, 800];
+        notes.forEach((freq, idx) => {
+          const oscV = audioCtx.createOscillator();
+          const gainV = audioCtx.createGain();
+          oscV.connect(gainV);
+          gainV.connect(audioCtx.destination);
+          oscV.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gainV.gain.setValueAtTime(0.2, now + idx * 0.12);
+          gainV.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.15);
+          oscV.start(now + idx * 0.12);
+          oscV.stop(now + idx * 0.12 + 0.15);
+        });
+      }
+    }
+
+    const pool = ['🎮', '🍕', '🚀', '✨', '💎', '🎉', '🕵️‍♂️', '🎡', '🍔', '🍦', '🚗', '🏆', '⚽', '🎯', '👑', '🔥', '🎨', '🎧'];
+
+    let selectedCardsCount = 16;
+    let team1Name = "الفريق 1";
+    let team2Name = "الفريق 2";
+    let team1Score = 0;
+    let team2Score = 0;
+    let currentTurn = 1;
+
+    let hasFlippedCard = false;
+    let lockBoard = false;
+    let firstCard, secondCard;
+    let matchesFound = 0;
+    let totalMatches = 8;
+
+    function selectGridSize(count) {
+      selectedCardsCount = count;
+      document.getElementById('btn-16').classList.toggle('active', count === 16);
+      document.getElementById('btn-36').classList.toggle('active', count === 36);
+    }
+
+    function showSetup() {
+      document.getElementById('setup-screen').style.display = 'flex';
+      document.getElementById('play-screen').style.display = 'none';
+      document.getElementById('restart-btn').style.display = 'none';
+    }
+
+    function initGame() {
+      team1Name = document.getElementById('team1-input').value.trim() || "الفريق 1";
+      team2Name = document.getElementById('team2-input').value.trim() || "الفريق 2";
+
+      document.getElementById('display-team1').innerText = team1Name;
+      document.getElementById('display-team2').innerText = team2Name;
+
+      team1Score = 0;
+      team2Score = 0;
+      currentTurn = 1;
+      matchesFound = 0;
+      totalMatches = selectedCardsCount / 2;
+
+      document.getElementById('score-team1').innerText = 0;
+      document.getElementById('score-team2').innerText = 0;
+
+      updateTurnUI();
+
+      document.getElementById('setup-screen').style.display = 'none';
+      document.getElementById('play-screen').style.display = 'block';
+
+      buildBoard();
+    }
+
+    function updateTurnUI() {
+      const card1 = document.getElementById('card-team1');
+      const card2 = document.getElementById('card-team2');
+      const indicator = document.getElementById('turn-indicator');
+
+      if (currentTurn === 1) {
+        card1.classList.add('active-turn');
+        card2.classList.remove('active-turn');
+        indicator.innerText = "الدور الآن لـ: " + team1Name;
+      } else {
+        card2.classList.add('active-turn');
+        card1.classList.remove('active-turn');
+        indicator.innerText = "الدور الآن لـ: " + team2Name;
+      }
+    }
+
+    function switchTurnManual() {
+      if (lockBoard) return;
+      currentTurn = currentTurn === 1 ? 2 : 1;
+      updateTurnUI();
+    }
+
+    function buildBoard() {
+      const grid = document.getElementById('game-grid');
+      grid.innerHTML = "";
+      
+      grid.className = "memory-grid " + (selectedCardsCount === 16 ? "grid-4" : "grid-6");
+
+      const selectedEmojis = pool.slice(0, totalMatches);
+      const items = [...selectedEmojis, ...selectedEmojis].sort(() => Math.random() - 0.5);
+
+      items.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.framework = item;
+
+        card.innerHTML = `
+          <div class="front-face">${item}</div>
+          <div class="back-face">${index + 1}</div>
+        `;
+
+        card.addEventListener('click', flipCard);
+        grid.appendChild(card);
+      });
+    }
+
+    function shuffleUnmatchedCards() {
+      if (lockBoard) return;
+
+      const cards = Array.from(document.querySelectorAll('.card:not(.matched)'));
+      const values = cards.map(c => c.dataset.framework);
+
+      values.sort(() => Math.random() - 0.5);
+
+      cards.forEach((card, i) => {
+        card.classList.remove('flip');
+        card.dataset.framework = values[i];
+        card.querySelector('.front-face').innerText = values[i];
+      });
+
+      resetBoard();
+      playSound('flip');
+    }
+
+    function flipCard() {
+      if (lockBoard || this === firstCard || this.classList.contains('matched')) return;
+
+      playSound('flip');
+      this.classList.add('flip');
+
+      if (!hasFlippedCard) {
+        hasFlippedCard = true;
+        firstCard = this;
+        return;
+      }
+
+      secondCard = this;
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+
+      if (isMatch) {
+        playSound('match');
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+
+        firstCard.removeEventListener('click', flipCard);
+        secondCard.removeEventListener('click', flipCard);
+
+        if (currentTurn === 1) {
+          team1Score++;
+          document.getElementById('score-team1').innerText = team1Score;
+        } else {
+          team2Score++;
+          document.getElementById('score-team2').innerText = team2Score;
+        }
+
+        matchesFound++;
+
+        if (matchesFound === totalMatches) {
+          setTimeout(endGame, 500);
+        }
+
+        resetBoard();
+      } else {
+        lockBoard = true;
+        setTimeout(() => {
+          playSound('wrong');
+          firstCard.classList.remove('flip');
+          secondCard.classList.remove('flip');
+          
+          currentTurn = currentTurn === 1 ? 2 : 1;
+          updateTurnUI();
+          resetBoard();
+        }, 900);
+      }
+    }
+
+    function resetBoard() {
+      [hasFlippedCard, lockBoard] = [false, false];
+      [firstCard, secondCard] = [null, null];
+    }
+
+    function endGame() {
+      playSound('victory');
+      confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+      const indicator = document.getElementById('turn-indicator');
+      
+      if (team1Score > team2Score) {
+        indicator.innerText = "🏆 الفائز هو: " + team1Name + "!";
+      } else if (team2Score > team1Score) {
+        indicator.innerText = "🏆 الفائز هو: " + team2Name + "!";
+      } else {
+        indicator.innerText = "🤝 تعادل متعادل بين الفريقين!";
+      }
+      
+      document.getElementById('restart-btn').style.display = 'inline-block';
+    }
+  </script>
+</body>
+</html>

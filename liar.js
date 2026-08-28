@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io('https://saalfa-game.onrender.com');
 
 let currentRoomCode = '';
 let isHost = false;

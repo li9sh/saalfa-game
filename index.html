@@ -3,14 +3,14 @@
 <head>
   <meta name="google-site-verification" content="cV7eNb5vbFyJ8W3LQVLgLkkqMiju9Q1TUtyNoKRdXA0" />
   <!-- وسوم أرشفة جوجل (SEO) -->
-<meta name="description" content="منصة فُلّة للألعاب الجماعية أونلاين - العب خارج السالفة والعجلة العشوائية مع أصحابك وعائلتك مجاناً من الجوال!" />
-<meta name="keywords" content="خارج السالفة, العجلة العشوائية, ألعاب جماعية, ألعاب أونلاين, فلة, ألعاب جوال, saalfa, fulla" />
-<meta name="author" content="Fulla Games" />
+  <meta name="description" content="منصة فُلّة للألعاب الجماعية أونلاين - العب خارج السالفة والعجلة العشوائية مع أصحابك وعائلتك مجاناً من الجوال!" />
+  <meta name="keywords" content="خارج السالفة, العجلة العشوائية, ألعاب جماعية, ألعاب أونلاين, فلة, ألعاب جوال, saalfa, fulla" />
+  <meta name="author" content="Fulla Games" />
 
-<!-- ظهور الموقع بشكل احترافي عند مشاركته في الواتساب وتويتر -->
-<meta property="og:title" content="منصة فُلّة | ألعاب جماعية أونلاين 🎮" />
-<meta property="og:description" content="تجمع الألعاب الحماسي! العب خارج السالفة والكلمة المفقودة مع أصحابك الآن." />
-<meta property="og:type" content="website" />
+  <!-- ظهور الموقع بشكل احترافي عند مشاركته في الواتساب وتويتر -->
+  <meta property="og:title" content="منصة فُلّة | ألعاب جماعية أونلاين 🎮" />
+  <meta property="og:description" content="تجمع الألعاب الحماسي! العب خارج السالفة والكلمة المفقودة مع أصحابك الآن." />
+  <meta property="og:type" content="website" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fulla | فُلّة - منصة الألعاب الجماعية</title>
@@ -105,9 +105,20 @@
       box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25);
     }
 
+    /* أبعاد ثابتة وحجم أصغر وموحد لجميع أيقونات الألعاب */
     .game-icon {
-      font-size: 3.5rem;
-      margin-bottom: 15px;
+      width: 54px;
+      height: 54px;
+      font-size: 1.6rem;
+      line-height: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px auto;
+      flex-shrink: 0;
     }
 
     .game-title {
@@ -211,7 +222,7 @@
     <div class="game-card">
       <div>
         <div class="game-icon">🎡</div>
-        <h2 class="game-title">العجلة العشوائية</h2>
+        <h2 class="game-title">عجلة الروليت</h2>
         <p class="game-desc">مُحتارين مين يبدأ؟ أو مين عليه العقاب؟ دوروا العجلة واخلوا القرار للقدر!</p>
       </div>
       <a href="wheel.html" class="btn-play">تدوير العجلة</a>
@@ -226,6 +237,7 @@
       </div>
       <a href="missing-word.html" class="btn-play">ابدأ التحدي</a>
     </div>
+
     <!-- لعبة تطابق الصور -->
     <div class="game-card">
       <div>
