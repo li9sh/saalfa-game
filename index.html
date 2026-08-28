@@ -419,34 +419,58 @@
       z-index: 1000;
     }
 
-    /* Responsive Design */
-    @media (max-width: 900px) {
-      .hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 30px 20px;
-      }
+   /* Responsive / تجاوب الجوال للصفحة الرئيسية */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 16px;
+  }
 
-      .hero-subtitle {
-        justify-content: center;
-      }
+  .brand-logo .name {
+    font-size: 1.4rem;
+  }
 
-      .hero-buttons {
-        justify-content: center;
-      }
+  .hero {
+    padding: 25px 15px;
+    gap: 30px;
+  }
 
-      .nav-links {
-        display: none;
-      }
-      
-      .hero-title {
-        font-size: 2.3rem;
-      }
-      
-      .hero-mockup {
-        width: 100%;
-      }
-    }
+  .hero-title {
+    font-size: 2.1rem;
+    text-align: center;
+  }
+
+  .hero-subtitle {
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .hero-desc {
+    font-size: 0.98rem;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-action-main, .btn-action-sec, .btn-rank {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .hero-mockup {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .answers-grid {
+    grid-template-columns: 1fr; /* جعل الخيارات فوق بعضها بالكامل */
+  }
+}
   </style>
 </head>
 <body>
