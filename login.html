@@ -324,36 +324,76 @@
     </div>
   </main>
 
-  <script>
-    function switchTab(tab) {
-      const loginForm = document.getElementById('login-form');
-      const signupForm = document.getElementById('signup-form');
-      const tabs = document.querySelectorAll('.tab-btn');
+  <!-- استدعاء مكتبة Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      if (tab === 'login') {
-        loginForm.classList.add('active');
-        signupForm.classList.remove('active');
-        tabs[0].classList.add('active');
-        tabs[1].classList.remove('active');
-      } else {
-        signupForm.classList.add('active');
-        loginForm.classList.remove('active');
-        tabs[1].classList.add('active');
-        tabs[0].classList.remove('active');
+<script>
+  // 1. ضع البيانات الخاصة بمشروعك في Supabase هنا
+  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+  
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 2. دالة تسجيل الدخول عبر شبكات التواصل (Twitch / TikTok / Google)
+  async function socialLogin(providerName) {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: providerName.toLowerCase(), // twitch, tiktok, google
+        options: {
+          redirectTo: window.location.origin + '/index.html' // الصفحة التي يرجع لها بعد النجاح
+        }
+      });
+
+      if (error) throw error;
+    } catch (err) {
+      alert('حدث خطأ أثناء الاتصال: ' + err.message);
+    }
+  }
+
+  // 3. دالة التبديل بين التبويبات
+  function switchTab(tab) {
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const tabs = document.querySelectorAll('.tab-btn');
+
+    if (tab === 'login') {
+      loginForm.classList.add('active');
+      signupForm.classList.remove('active');
+      tabs[0].classList.add('active');
+      tabs[1].classList.remove('active');
+    } else {
+      signupForm.classList.add('active');
+      loginForm.classList.remove('active');
+      tabs[1].classList.add('active');
+      tabs[0].classList.remove('active');
+    }
+  }
+
+  // 4. دالة التسجيل العادي (بالبريد وكلمة المرور)
+  async function handleAuth(e, type) {
+    e.preventDefault();
+    const email = e.target.querySelector('input[type="email"], input[type="text"]').value;
+    const password = e.target.querySelector('input[type="password"]').value;
+
+  
+    if (type === 'signup') {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) alert(error.message);
+      else alert('تم إنشاء الحساب بنجاح! تفقد بريدك لتفعيله.');
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) alert(error.message);
+      else {
+        alert('تم تسجيل الدخول بنجاح! 🎉');
+        window.location.href = 'index.html';
       }
     }
+    // استبدلي هذا السطر بالرابط الخاص بكِ
+const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co/rest/v1/'; // والمفتاح الذي نسختيه من الشاشة السابقة (Publishable key)
 
-    function handleAuth(e, type) {
-      e.preventDefault();
-      alert(type === 'login' ? 'تم تسجيل الدخول بنجاح! 🎉' : 'تم إنشاء حسابك بنجاح! 🎉');
-      window.location.href = 'index.html';
-    }
-
-    function socialLogin(platform) {
-      alert(`جاري توجيهك لتسجيل الدخول عبر حساب ${platform}...`);
-      // مستقبلاً يربط هنا الـ API الخاص بـ OAuth للمنصة
-    }
-  </script>
+const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
+  }
+</script>
 
 </body>
 </html>
