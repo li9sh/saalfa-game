@@ -328,16 +328,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // 1. ضع البيانات الخاصة بمشروعك في Supabase هنا
-  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'; 
-  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+  // 1. إعدادات السيرفر والمفاتيح
+  const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
   
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // 2. دالة تسجيل الدخول عبر شبكات التواصل (Twitch / TikTok / Google)
   async function socialLogin(providerName) {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: providerName.toLowerCase(), // twitch, tiktok, google
         options: {
           redirectTo: window.location.origin + '/index.html' // الصفحة التي يرجع لها بعد النجاح
@@ -375,23 +375,18 @@
     const email = e.target.querySelector('input[type="email"], input[type="text"]').value;
     const password = e.target.querySelector('input[type="password"]').value;
 
-  
     if (type === 'signup') {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
       if (error) alert(error.message);
       else alert('تم إنشاء الحساب بنجاح! تفقد بريدك لتفعيله.');
     } else {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) alert(error.message);
       else {
         alert('تم تسجيل الدخول بنجاح! 🎉');
         window.location.href = 'index.html';
       }
     }
-    // استبدلي هذا السطر بالرابط الخاص بكِ
-const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co/rest/v1/'; // والمفتاح الذي نسختيه من الشاشة السابقة (Publishable key)
-
-const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
   }
 </script>
 
