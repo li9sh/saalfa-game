@@ -356,6 +356,7 @@
       gap: 8px;
       cursor: pointer;
       transition: all 0.2s;
+      user-select: none;
     }
 
     .answer-opt:hover {
@@ -417,60 +418,71 @@
       text-decoration: none;
       box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
       z-index: 1000;
+      transition: transform 0.2s;
     }
 
-   /* Responsive / تجاوب الجوال للصفحة الرئيسية */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 12px 16px;
-  }
+    .whatsapp-btn:hover {
+      transform: scale(1.08);
+    }
 
-  .brand-logo .name {
-    font-size: 1.4rem;
-  }
+    /* Responsive / تجاوب الجوال للصفحة الرئيسية */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 16px;
+      }
 
-  .hero {
-    padding: 25px 15px;
-    gap: 30px;
-  }
+      .nav-links {
+        display: none; /* إخفاء الروابط العادية في الجوال لترتيب الشريط العلوي */
+      }
 
-  .hero-title {
-    font-size: 2.1rem;
-    text-align: center;
-  }
+      .brand-logo .name {
+        font-size: 1.4rem;
+      }
 
-  .hero-subtitle {
-    justify-content: center;
-    font-size: 0.95rem;
-  }
+      .hero {
+        flex-direction: column;
+        padding: 25px 15px;
+        gap: 30px;
+      }
 
-  .hero-desc {
-    font-size: 0.98rem;
-    text-align: center;
-    margin-bottom: 25px;
-  }
+      .hero-title {
+        font-size: 2.1rem;
+        text-align: center;
+      }
 
-  .hero-buttons {
-    flex-direction: column;
-    width: 100%;
-  }
+      .hero-subtitle {
+        justify-content: center;
+        font-size: 0.95rem;
+      }
 
-  .btn-action-main, .btn-action-sec, .btn-rank {
-    width: 100%;
-    justify-content: center;
-    padding: 12px 20px;
-    font-size: 1rem;
-  }
+      .hero-desc {
+        font-size: 0.98rem;
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-  .hero-mockup {
-    padding: 16px;
-    border-radius: 18px;
-  }
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
 
-  .answers-grid {
-    grid-template-columns: 1fr; /* جعل الخيارات فوق بعضها بالكامل */
-  }
-}
+      .btn-action-main, .btn-action-sec, .btn-rank {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+
+      .hero-mockup {
+        width: 100%;
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .answers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -556,7 +568,7 @@
   </main>
 
   <!-- زر واتساب العائم -->
-  <a href="#" class="whatsapp-btn">💬</a>
+  <a href="https://wa.me/" target="_blank" class="whatsapp-btn" aria-label="تواصل معنا عبر الواتساب">💬</a>
 
   <!-- Script التفاعل مع الأسئلة والنقاط -->
   <script>
