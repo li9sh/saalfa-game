@@ -334,13 +334,26 @@
   
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 2. دالة تسجيل الدخول عبر شبكات التواصل (Twitch / TikTok / Google)
+  // 2. التحقق التلقائي من حالة التوثيق عند فتح الصفحة أو العودة من OAuth
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      console.log('المستخدم مسجّل الدخول:', session.user);
+      // التوجيه فوراً لصفحة الرئيسية/اللعبة عند النجاح
+      window.location.href = 'index.html';
+    }
+  });
+
+  // 3. دالة تسجيل الدخول عبر شبكات التواصل
   async function socialLogin(providerName) {
     try {
+      // تحديد الرابط الحالي ديناميكياً ليتم التوجيه إليه بدقة بعد التوثيق
+      const currentUrl = window.location.href.split('#')[0].split('?')[0];
+      const targetUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/index.html';
+
       const { data, error } = await supabaseClient.auth.signInWithOAuth({
-        provider: providerName.toLowerCase(), // twitch, tiktok, google
+        provider: providerName.toLowerCase(),
         options: {
-          redirectTo: window.location.origin + '/index.html' // الصفحة التي يرجع لها بعد النجاح
+          redirectTo: targetUrl
         }
       });
 
@@ -350,7 +363,7 @@
     }
   }
 
-  // 3. دالة التبديل بين التبويبات
+  // 4. دالة التبديل بين التبويبات
   function switchTab(tab) {
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
@@ -369,7 +382,7 @@
     }
   }
 
-  // 4. دالة التسجيل العادي (بالبريد وكلمة المرور)
+  // 5. دالة التسجيل العادي (بالبريد وكلمة المرور)
   async function handleAuth(e, type) {
     e.preventDefault();
     const email = e.target.querySelector('input[type="email"], input[type="text"]').value;
