@@ -432,7 +432,7 @@
       }
 
       .nav-links {
-        display: none; /* إخفاء الروابط العادية في الجوال لترتيب الشريط العلوي */
+        display: none;
       }
 
       .brand-logo .name {
@@ -501,7 +501,8 @@
         <li><a href="#">الأسئلة الشائعة</a></li>
       </ul>
     </div>
-    <div class="nav-left">
+    <!-- إضافة id="auth-buttons" لاستبدال هذا الحاوي بالبروفايل تلقائياً -->
+    <div class="nav-left" id="auth-buttons">
       <a href="#" class="btn-outline">🚪 دخول غرفة</a>
       <a href="login.html" class="btn-primary">👤 تسجيل الدخول</a>
     </div>
@@ -641,58 +642,67 @@
       document.getElementById('feedback-msg').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
     }
-    
   </script>
-<!-- مكتبة Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
-  const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <!-- مكتبة Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  // عند تحميل الصفحة الرئيسية
-  window.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    
-    if (session) {
-      // المستخدم مسجل الدخول
-      renderLoggedInUser(session.user);
-    } else {
-      // المستخدم غير مسجل الدخول
-      renderGuestUser();
+  <script>
+    const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      
+      if (session && session.user) {
+        renderLoggedInUser(session.user);
+      } else {
+        renderGuestUser();
+      }
+
+      // الاستماع لتغيرات الجلسة تلقائياً فور تسجيل الدخول
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (session && session.user) {
+          renderLoggedInUser(session.user);
+        } else {
+          renderGuestUser();
+        }
+      });
+    });
+
+    function renderLoggedInUser(user) {
+      const authBtnArea = document.getElementById('auth-buttons');
+      if (!authBtnArea) return;
+
+      const userName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'حسابي';
+      const userAvatar = user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + userName;
+
+      authBtnArea.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="${userAvatar}" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ec4899; object-fit: cover;">
+          <span style="font-weight: bold; color: #fff;">أهلاً، ${userName}</span>
+          <button onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s;">
+            تسجيل الخروج
+          </button>
+        </div>
+      `;
     }
-  });
 
-  // عرض بيانات المستخدم وزر تسجيل الخروج
-  function renderLoggedInUser(user) {
-    const navContainer = document.querySelector('.navbar'); // أو العنصر الحاوي لأزرار الهيدر
-    
-    // استخراج اسم المستخدم والصورة (إن وجدت من Google/Twitch)
-    const userName = user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0];
-    const userAvatar = user.user_metadata.avatar_url || 'https://via.placeholder.com/40';
+    function renderGuestUser() {
+      const authBtnArea = document.getElementById('auth-buttons');
+      if (!authBtnArea) return;
 
-    // استبدال أزرار التسجيل ببروفايل المستخدم وزر الخروج
-    const userProfileHTML = `
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="${userAvatar}" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ec4899;">
-        <span style="font-weight: bold; color: #fff;">أهلاً، ${userName}</span>
-        <button onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-          تسجيل الخروج
-        </button>
-      </div>
-    `;
+      authBtnArea.innerHTML = `
+        <a href="#" class="btn-outline">🚪 دخول غرفة</a>
+        <a href="login.html" class="btn-primary">👤 تسجيل الدخول</a>
+      `;
+    }
 
-    // ضع عنصر البروفايل مكان أزرار الدخول
-    const authBtnArea = document.getElementById('auth-buttons');
-    if (authBtnArea) authBtnArea.innerHTML = userProfileHTML;
-  }
-
-  // دالة تسجيل الخروج
-  async function logout() {
-    await supabaseClient.auth.signOut();
-    window.location.reload(); // إعادة تحميل الصفحة للعودة لحالة الزائر
-  }
-</script>
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.reload();
+    }
+  </script>
 </body>
 </html>
