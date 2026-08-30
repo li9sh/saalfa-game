@@ -432,7 +432,7 @@
       }
 
       .nav-links {
-        display: none; /* إخفاء الروابط العادية في الجوال لترتيب الشريط العلوي */
+        display: none;
       }
 
       .brand-logo .name {
@@ -487,7 +487,6 @@
 </head>
 <body>
 
-  <!-- Navbar (الشريط العلوي) -->
   <nav class="navbar">
     <div class="nav-right">
       <a href="index.html" class="brand-logo">
@@ -501,13 +500,12 @@
         <li><a href="#">الأسئلة الشائعة</a></li>
       </ul>
     </div>
-    <div class="nav-left">
+    <div class="nav-left" id="auth-buttons">
       <a href="#" class="btn-outline">🚪 دخول غرفة</a>
       <a href="login.html" class="btn-primary">👤 تسجيل الدخول</a>
     </div>
   </nav>
 
-  <!-- Hero Section (القسم الرئيسي) -->
   <main class="hero">
     <div class="hero-content">
       <h1 class="hero-title">
@@ -526,7 +524,6 @@
       </div>
     </div>
 
-    <!-- Mockup Preview (معاينة اللعبة التفاعلية) -->
     <div class="hero-mockup" id="interactive-demo">
       <div class="mockup-header">
         <div class="room-badge">غرفة نشطة #4821</div>
@@ -542,16 +539,13 @@
         <div class="question-text" id="question-text">مين اللكاع اللي ما يدري وش السالفة بيننا؟</div>
       </div>
 
-      <!-- الخيارات التفاعلية -->
       <div class="answers-grid" id="answers-container">
         <div class="answer-opt" onclick="selectAnswer(this, true)"><span>أ</span> أحمد</div>
         <div class="answer-opt" onclick="selectAnswer(this, false)"><span>ب</span> سارة</div>
       </div>
 
-      <!-- رسالة النتيجة التفاعلية -->
       <div id="feedback-msg" style="display: none; text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 0.95rem;"></div>
 
-      <!-- قائمة اللاعبين والنقاط -->
       <div class="players-list">
         <div class="player-row">
           <div class="player-info">👑 أنت (اللاعب)</div>
@@ -567,10 +561,8 @@
     </div>
   </main>
 
-  <!-- زر واتساب العائم -->
   <a href="https://wa.me/" target="_blank" class="whatsapp-btn" aria-label="تواصل معنا عبر الواتساب">💬</a>
 
-  <!-- Script التفاعل مع الأسئلة والنقاط -->
   <script>
     let score = 1200;
     let answered = false;
@@ -641,58 +633,51 @@
       document.getElementById('feedback-msg').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
     }
-    
   </script>
-<!-- مكتبة Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
-  const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  // عند تحميل الصفحة الرئيسية
-  window.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    
-    if (session) {
-      // المستخدم مسجل الدخول
-      renderLoggedInUser(session.user);
-    } else {
-      // المستخدم غير مسجل الدخول
-      renderGuestUser();
+  <script>
+    const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // عند تحميل الصفحة الرئيسية
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      
+      if (session) {
+        // المستخدم مسجل الدخول
+        renderLoggedInUser(session.user);
+      }
+    });
+
+    // عرض بيانات المستخدم وزر تسجيل الخروج
+    function renderLoggedInUser(user) {
+      const authBtnArea = document.getElementById('auth-buttons');
+      
+      const userName = user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0];
+      const userAvatar = user.user_metadata.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + userName;
+
+      const userProfileHTML = `
+        <a href="#" class="btn-outline">🚪 دخول غرفة</a>
+        <div style="display: flex; align-items: center; gap: 10px; background: rgba(30, 41, 59, 0.7); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(236, 72, 153, 0.3);">
+          <img src="${userAvatar}" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid #ec4899; object-fit: cover;">
+          <span style="font-weight: bold; color: #fff; font-size: 0.9rem;">${userName}</span>
+          <button onclick="logout()" title="تسجيل الخروج" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem; margin-right: 5px;">
+            خروج
+          </button>
+        </div>
+      `;
+
+      if (authBtnArea) authBtnArea.innerHTML = userProfileHTML;
     }
-  });
 
-  // عرض بيانات المستخدم وزر تسجيل الخروج
-  function renderLoggedInUser(user) {
-    const navContainer = document.querySelector('.navbar'); // أو العنصر الحاوي لأزرار الهيدر
-    
-    // استخراج اسم المستخدم والصورة (إن وجدت من Google/Twitch)
-    const userName = user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0];
-    const userAvatar = user.user_metadata.avatar_url || 'https://via.placeholder.com/40';
-
-    // استبدال أزرار التسجيل ببروفايل المستخدم وزر الخروج
-    const userProfileHTML = `
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="${userAvatar}" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ec4899;">
-        <span style="font-weight: bold; color: #fff;">أهلاً، ${userName}</span>
-        <button onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-          تسجيل الخروج
-        </button>
-      </div>
-    `;
-
-    // ضع عنصر البروفايل مكان أزرار الدخول
-    const authBtnArea = document.getElementById('auth-buttons');
-    if (authBtnArea) authBtnArea.innerHTML = userProfileHTML;
-  }
-
-  // دالة تسجيل الخروج
-  async function logout() {
-    await supabaseClient.auth.signOut();
-    window.location.reload(); // إعادة تحميل الصفحة للعودة لحالة الزائر
-  }
-</script>
+    // دالة تسجيل الخروج
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.reload();
+    }
+  </script>
 </body>
 </html>
