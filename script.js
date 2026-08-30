@@ -1,206 +1,188 @@
-// إنشاء سياق الصوت المدمج في المتصفح
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// 1. إعدادات السيرفر والمفاتيح الخاصة بـ Supabase
+const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
+const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// صوت التكتكة عند المرور بين أقسام العجلة
-function playTickSound() {
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+// 2. خيارات العجلة والبيانات الأساسية
+let options = ['خيارات 1', 'خيارات 2', 'خيارات 3', 'خيارات 4'];
+const colors = ['#ec4899', '#8b5cf6', '#38bdf8', '#10b981', '#f59e0b', '#ef4444'];
 
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(600, audioCtx.currentTime); // تردد التكتكة
-  osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.04);
-
-  gain.gain.setValueAtTime(0.15, audioCtx.currentTime); // رفع/خفض مستوى الصوت
-  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.04);
-}
-
-// صوت احتفالي متصاعد عند النتيجة والإعلان عن الفائز
-function playWinSound() {
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-  const notes = [261.63, 329.63, 392.00, 523.25]; // نغمات موسيقية مبهجة (C-E-G-C)
-  notes.forEach((freq, index) => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.1);
-
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + index * 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.1 + 0.3);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(audioCtx.currentTime + index * 0.1);
-    osc.stop(audioCtx.currentTime + index * 0.1 + 0.3);
-  });
-}
-
-const canvas = document.getElementById('wheelCanvas');
-const ctx = canvas.getContext('2d');
-const spinBtn = document.getElementById('spinBtn');
-const resultBox = document.getElementById('resultBox');
-const resultText = document.getElementById('resultText');
-const optionInput = document.getElementById('optionInput');
-const optionsList = document.getElementById('optionsList');
-
-// قائمة الخيارات الإبتدائية
-let options = ["علي", "سارة", "خالد", "نورة"];
-const colors = ['#f43f5e', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#3b82f6', '#84cc16'];
-
-let currentAngle = 0;
+let startAngle = 0;
 let isSpinning = false;
-let lastSegmentIndex = -1; // لتتبع القسم الحالي ومنع تكرار التكتكة في نفس القطاع
 
-// رسم العجلة بشكل ديناميكي
+// 3. التحقق من حالة التسجيل عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  updateUI(session);
+
+  // الاستماع للتغيرات في حالة التوثيق
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    updateUI(session);
+  });
+
+  // رسم العجلة وتنسيق الخيارات عند فتح الصفحة
+  renderOptionsList();
+  drawWheel();
+});
+
+// 4. تحديث الواجهة بناءً على حالة تسجيل الدخول
+function updateUI(session) {
+  const loginBtn = document.getElementById('login-btn');
+  const profileView = document.getElementById('profile-view');
+  const playerName = document.getElementById('player-name');
+
+  if (session) {
+    const username = session.user.user_metadata?.username || session.user.email.split('@')[0];
+    if (playerName) playerName.innerText = `🎮 ${username}`;
+    if (loginBtn) loginBtn.classList.add('hidden');
+    if (profileView) profileView.classList.remove('hidden');
+  } else {
+    if (loginBtn) loginBtn.classList.remove('hidden');
+    if (profileView) profileView.classList.add('hidden');
+  }
+}
+
+// 5. دالة تسجيل الخروج
+async function logout() {
+  const { error } = await supabaseClient.auth.signOut();
+  if (error) {
+    alert('حدث خطأ أثناء الخروج: ' + error.message);
+  } else {
+    window.location.reload();
+  }
+}
+
+// 6. رسم العجلة على Canvas
 function drawWheel() {
-  const numOptions = options.length;
-  const radius = canvas.width / 2;
+  const canvas = document.getElementById('wheelCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const outsideRadius = canvas.width / 2 - 10;
+  const textRadius = outsideRadius - 50;
+  const insideRadius = 30;
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (numOptions === 0) {
-    ctx.fillStyle = "#64748b";
-    ctx.font = "bold 16px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("أضف خيارات للبدء", radius, radius);
+  if (options.length === 0) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outsideRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = '#1e293b';
+    ctx.fill();
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 16px Tajawal';
+    ctx.textAlign = 'center';
+    ctx.fillText('أضف خيارات للبدء', centerX, centerY);
     return;
   }
 
-  const arcSize = (2 * Math.PI) / numOptions;
+  const arc = Math.PI * 2 / options.length;
 
-  for (let i = 0; i < numOptions; i++) {
-    const angle = currentAngle + i * arcSize;
-    ctx.beginPath();
+  for (let i = 0; i < options.length; i++) {
+    const angle = startAngle + i * arc;
     ctx.fillStyle = colors[i % colors.length];
-    ctx.moveTo(radius, radius);
-    ctx.arc(radius, radius, radius, angle, angle + arcSize);
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outsideRadius, angle, angle + arc, false);
+    ctx.arc(centerX, centerY, insideRadius, angle + arc, angle, true);
     ctx.fill();
 
-    // كتابة النص
     ctx.save();
-    ctx.translate(radius, radius);
-    ctx.rotate(angle + arcSize / 2);
-    ctx.textAlign = "right";
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 16px Arial";
-    ctx.fillText(options[i], radius - 20, 5);
+    ctx.translate(
+      centerX + Math.cos(angle + arc / 2) * textRadius,
+      centerY + Math.sin(angle + arc / 2) * textRadius
+    );
+    ctx.rotate(angle + arc / 2 + Math.PI / 2);
+    ctx.font = 'bold 14px Tajawal';
+    ctx.textAlign = 'center';
+    ctx.fillText(options[i], 0, 0);
     ctx.restore();
   }
 }
 
-// تحديث قائمة الأسماء الظاهرة للمستخدم
-function updateOptionsList() {
-  optionsList.innerHTML = "";
-  options.forEach((opt, index) => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span>${opt}</span>
-      <button class="delete-btn" onclick="removeOption(${index})">❌</button>
-    `;
-    optionsList.appendChild(li);
-  });
+// 7. دالة تدوير العجلة
+function spinWheel() {
+  if (isSpinning || options.length < 2) {
+    if (options.length < 2) alert('يرجى إضافة خيارين على الأقل للتدوير!');
+    return;
+  }
+
+  isSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('resultBox').classList.add('hidden');
+
+  const spinAngleStart = Math.random() * 10 + 10;
+  let spinTime = 0;
+  const spinTimeTotal = Math.random() * 3000 + 4000;
+
+  function rotate() {
+    spinTime += 30;
+    if (spinTime >= spinTimeTotal) {
+      stopRotateWheel();
+      return;
+    }
+    const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+    startAngle += (spinAngle * Math.PI / 180);
+    drawWheel();
+    requestAnimationFrame(rotate);
+  }
+  rotate();
 }
 
-// إضافة خيار جديد
+function stopRotateWheel() {
+  isSpinning = false;
+  document.getElementById('spinBtn').disabled = false;
+
+  const canvas = document.getElementById('wheelCanvas');
+  const degrees = startAngle * 180 / Math.PI + 90;
+  const arclen = 360 / options.length;
+  const index = Math.floor((360 - (degrees % 360)) / arclen) % options.length;
+
+  const winner = options[index];
+  document.getElementById('resultText').innerText = winner;
+  document.getElementById('resultBox').classList.remove('hidden');
+}
+
+function easeOut(t, b, c, d) {
+  const ts = (t /= d) * t;
+  const tc = ts * t;
+  return b + c * (tc + -3 * ts + 3 * t);
+}
+
+// 8. إدارة الخيارات (إضافة/حذف)
 function addOption() {
-  const text = optionInput.value.trim();
-  if (text !== "") {
+  const input = document.getElementById('optionInput');
+  const text = input.value.trim();
+  if (text) {
     options.push(text);
-    optionInput.value = "";
-    updateOptionsList();
+    input.value = '';
+    renderOptionsList();
     drawWheel();
   }
 }
 
-// إضافة بالضغط على Enter
 function handleKeyPress(e) {
   if (e.key === 'Enter') addOption();
 }
 
-// حذف خيار
-function removeOption(index) {
-  if (options.length <= 1) {
-    alert("يجب أن يحتوي الموقع على خيار واحد على الأقل!");
-    return;
-  }
+function deleteOption(index) {
   options.splice(index, 1);
-  updateOptionsList();
+  renderOptionsList();
   drawWheel();
 }
 
-// تشغيل حركة الدوران مع التكتكة
-function spinWheel() {
-  if (isSpinning || options.length === 0) return;
-
-  // تفعيل سياق الصوت فوراً عند تفاعل المستخدم
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-
-  isSpinning = true;
-  spinBtn.disabled = true;
-  resultBox.classList.add('hidden');
-
-  const spinAngle = Math.floor(Math.random() * 360) + 1800; 
-  let start = null;
-  const duration = 4000;
-
-  function animate(timestamp) {
-    if (!start) start = timestamp;
-    const progress = (timestamp - start) / duration;
-
-    if (progress < 1) {
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      currentAngle = (spinAngle * (Math.PI / 180) * easeOut);
-
-      // تشغيل صوت التكتكة عند الانتقال بين قطاعات العجلة
-      const numOptions = options.length;
-      const arcSize = (2 * Math.PI) / numOptions;
-      const currentSegment = Math.floor((currentAngle % (2 * Math.PI)) / arcSize);
-      
-      if (currentSegment !== lastSegmentIndex) {
-        playTickSound();
-        lastSegmentIndex = currentSegment;
-      }
-
-      drawWheel();
-      requestAnimationFrame(animate);
-    } else {
-      isSpinning = false;
-      spinBtn.disabled = false;
-      calculateResult();
-    }
-  }
-
-  requestAnimationFrame(animate);
+function renderOptionsList() {
+  const list = document.getElementById('optionsList');
+  if (!list) return;
+  list.innerHTML = '';
+  options.forEach((opt, index) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span>${opt}</span>
+      <button class="delete-btn" onclick="deleteOption(${index})">❌</button>
+    `;
+    list.appendChild(li);
+  });
 }
-
-// حساب الخيار الفائز وتشغيل صوت النتيجة
-function calculateResult() {
-  const numOptions = options.length;
-  const arcSize = (2 * Math.PI) / numOptions;
-  const normalizedAngle = (currentAngle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-  const pointerAngle = (1.5 * Math.PI - normalizedAngle + 2 * Math.PI) % (2 * Math.PI);
-  const winningIndex = Math.floor(pointerAngle / arcSize) % numOptions;
-
-  resultText.innerText = options[winningIndex];
-  resultBox.classList.remove('hidden');
-
-  // تشغيل صوت الفوز 🎵
-  playWinSound();
-}
-
-// التشغيل الأولي
-updateOptionsList();
-drawWheel();
