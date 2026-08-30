@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>فُلّة | تسجيل الدخول وإنشاء حساب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet" />
+  <title>تسجيل الدخول | المنصة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -18,75 +18,57 @@
       color: #fff;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 10% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
     }
 
-    /* --- Navbar --- */
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 40px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(30, 41, 59, 0.75);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 35px 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(236, 72, 153, 0.15);
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 25px;
     }
 
     .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid rgba(236, 72, 153, 0.4);
-      padding: 6px 18px;
-      border-radius: 40px;
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+      display: inline-block;
+      animation: bounce 2s infinite;
     }
 
-    .brand-logo .name {
-      font-size: 1.7rem;
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .brand-title {
+      font-size: 1.8rem;
       font-weight: 900;
       background: linear-gradient(45deg, #ec4899, #8b5cf6, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .btn-back {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-weight: bold;
+    .brand-subtitle {
+      color: #94a3b8;
       font-size: 0.95rem;
-      transition: color 0.2s;
+      margin-top: 5px;
     }
 
-    .btn-back:hover {
-      color: #ec4899;
-    }
-
-    /* --- Auth Container --- */
-    .auth-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
-
-    .auth-card {
-      background: rgba(30, 41, 59, 0.75);
-      border: 2px solid rgba(236, 72, 153, 0.3);
-      border-radius: 24px;
-      width: 100%;
-      max-width: 440px;
-      padding: 35px 30px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(236, 72, 153, 0.15);
-      backdrop-filter: blur(10px);
-    }
-
-    /* Social Login Buttons */
+    /* أزرار الدخول الاجتماعي (Google & Twitch) */
     .social-auth {
       display: flex;
       flex-direction: column;
@@ -95,68 +77,54 @@
     }
 
     .btn-social {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid transparent;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 11px;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 0.95rem;
-      text-decoration: none;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .btn-social:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-tiktok {
-      background: #000;
-      border-color: #ff0050;
-      box-shadow: 0 0 10px rgba(255, 0, 80, 0.2);
-    }
-
-    .btn-twitch {
-      background: #9146FF;
-      border-color: #a970ff;
-      box-shadow: 0 0 10px rgba(145, 70, 255, 0.3);
+      transition: all 0.2s ease;
     }
 
     .btn-google {
-      background: #ffffff;
-      color: #000;
-      border-color: #ddd;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
     }
 
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: #64748b;
-      margin: 20px 0;
-      font-size: 0.85rem;
+    .btn-google:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
     }
 
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    .btn-twitch {
+      background: rgba(145, 71, 255, 0.15);
+      border-color: #9147ff;
+      color: #a970ff;
     }
 
-    .divider span {
-      padding: 0 10px;
+    .btn-twitch:hover {
+      background: #9147ff;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(145, 71, 255, 0.4);
     }
 
-    /* Tabs (التبويب) */
+    .btn-social svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Tabs للتبديل */
     .auth-tabs {
       display: flex;
       background: rgba(15, 23, 42, 0.6);
-      border-radius: 14px;
       padding: 5px;
+      border-radius: 14px;
       margin-bottom: 20px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -167,70 +135,61 @@
       border: none;
       background: transparent;
       color: #94a3b8;
+      font-weight: 700;
       font-size: 0.95rem;
-      font-weight: bold;
       border-radius: 10px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
 
     .tab-btn.active {
       background: linear-gradient(45deg, #ec4899, #8b5cf6);
       color: #fff;
-      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
-    }
-
-    /* Forms */
-    .auth-form {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .auth-form.active {
-      display: flex;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      margin-bottom: 16px;
     }
 
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: bold;
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: #cbd5e1;
+      margin-bottom: 8px;
     }
 
-    .form-group input {
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
       background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      border: 1px solid #334155;
       border-radius: 12px;
-      padding: 11px 14px;
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .form-group input:focus {
+    .form-input:focus {
       border-color: #ec4899;
-      box-shadow: 0 0 10px rgba(236, 72, 153, 0.2);
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.25);
     }
 
     .btn-submit {
+      width: 100%;
+      padding: 14px;
       background: linear-gradient(45deg, #ec4899, #8b5cf6);
-      color: #fff;
       border: none;
-      padding: 12px;
       border-radius: 12px;
-      font-size: 1rem;
+      color: #fff;
+      font-size: 1.05rem;
       font-weight: 900;
       cursor: pointer;
-      margin-top: 5px;
       box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
       transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
     }
 
     .btn-submit:hover {
@@ -238,170 +197,187 @@
       box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5);
     }
 
-    .form-footer {
+    .divider {
+      display: flex;
+      align-items: center;
       text-align: center;
-      margin-top: 10px;
+      margin: 18px 0;
+      color: #64748b;
       font-size: 0.85rem;
-      color: #94a3b8;
     }
 
-    .form-footer a {
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #334155;
+    }
+
+    .divider span {
+      padding: 0 10px;
+    }
+
+    .btn-room-direct {
+      width: 100%;
+      padding: 12px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid #38bdf8;
+      border-radius: 12px;
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-room-direct:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    .auth-footer a {
       color: #38bdf8;
       text-decoration: none;
-      font-weight: bold;
-    }
-
-    @media (max-width: 480px) {
-      .navbar { padding: 12px 20px; }
-      .auth-card { padding: 25px 20px; }
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="index.html" class="brand-logo">
-      <span class="name">فُلّة</span>
-    </a>
-    <a href="index.html" class="btn-back">➔ العودة للرئيسية</a>
-  </nav>
-
-  <main class="auth-wrapper">
-    <div class="auth-card">
-      
-      <div class="social-auth">
-        <button class="btn-social btn-tiktok" onclick="socialLogin('TikTok')">
-          🎵 الدخول بواسطة TikTok
-        </button>
-        <button class="btn-social btn-twitch" onclick="socialLogin('Twitch')">
-          👾 الدخول بواسطة Twitch
-        </button>
-        <button class="btn-social btn-google" onclick="socialLogin('Google')">
-          🌐 الدخول بواسطة Google
-        </button>
-      </div>
-
-      <div class="divider">
-        <span>أو عبر البريد الإلكتروني</span>
-      </div>
-
-      <div class="auth-tabs">
-        <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
-        <button class="tab-btn" onclick="switchTab('signup')">حساب جديد</button>
-      </div>
-
-      <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
-        <div class="form-group">
-          <label>البريد الإلكتروني أو اسم المستخدم</label>
-          <input type="text" placeholder="example@mail.com" required />
-        </div>
-        <div class="form-group">
-          <label>كلمة المرور</label>
-          <input type="password" placeholder="••••••••" required />
-        </div>
-        <button type="submit" class="btn-submit">دخول 🚀</button>
-        <div class="form-footer">
-          <a href="#">نسيت كلمة المرور؟</a>
-        </div>
-      </form>
-
-      <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
-        <div class="form-group">
-          <label>اسم المستخدم (الاسم باللعبة)</label>
-          <input type="text" placeholder="مثال: البطل_1" required />
-        </div>
-        <div class="form-group">
-          <label>البريد الإلكتروني</label>
-          <input type="email" placeholder="example@mail.com" required />
-        </div>
-        <div class="form-group">
-          <label>كلمة المرور</label>
-          <input type="password" placeholder="••••••••" required />
-        </div>
-        <button type="submit" class="btn-submit">إنشاء الحساب ✨</button>
-      </form>
-
+  <div class="auth-container">
+    <!-- Header -->
+    <div class="brand-header">
+      <div class="brand-logo">🚀</div>
+      <h1 class="brand-title">أهلاً بك معنا</h1>
+      <p class="brand-subtitle">سجل دخولك أو أنشئ حسابك لبدء التحدي</p>
     </div>
-  </main>
 
-  <!-- استدعاء مكتبة Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- أزرار الدخول السريع عبر Google و Twitch -->
+    <div class="social-auth">
+      <!-- Google -->
+      <button class="btn-social btn-google" onclick="loginWithSocial('Google')">
+        <svg viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        الدخول بواسطة Google
+      </button>
 
-<script>
-  // 1. إعدادات السيرفر والمفاتيح
-  const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
-  const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
-  
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      <!-- Twitch -->
+      <button class="btn-social btn-twitch" onclick="loginWithSocial('Twitch')">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.571 4.714h1.715v5.143h-1.715zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+        </svg>
+        الدخول بواسطة Twitch
+      </button>
+    </div>
 
-  // 2. التحقق التلقائي من حالة التوثيق عند فتح الصفحة أو العودة من OAuth
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (session) {
-      console.log('المستخدم مسجّل الدخول:', session.user);
-      // التوجيه فوراً لصفحة الرئيسية/اللعبة عند النجاح
-      window.location.href = 'index.html';
-    }
-  });
+    <!-- فاصل -->
+    <div class="divider">
+      <span>أو البريد والإلكتروني / الرقم</span>
+    </div>
 
-  // 3. دالة تسجيل الدخول عبر شبكات التواصل
-  async function socialLogin(providerName) {
-    try {
-      // تحديد الرابط الحالي ديناميكياً ليتم التوجيه إليه بدقة بعد التوثيق
-      const currentUrl = window.location.href.split('#')[0].split('?')[0];
-      const targetUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/index.html';
+    <!-- Tabs للتبديل -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
+      <button class="tab-btn" onclick="switchTab('register')">حساب جديد</button>
+    </div>
 
-      const { data, error } = await supabaseClient.auth.signInWithOAuth({
-        provider: providerName.toLowerCase(),
-        options: {
-          redirectTo: targetUrl
-        }
-      });
+    <!-- نموذج تسجيل الدخول -->
+    <form id="login-form" onsubmit="handleAuth(event, 'login')">
+      <div class="form-group">
+        <label class="form-label">رقم الجوال أو البريد الإلكتروني</label>
+        <input type="text" class="form-input" placeholder="05xxxxxxxx أو name@example.com" required />
+      </div>
 
-      if (error) throw error;
-    } catch (err) {
-      alert('حدث خطأ أثناء الاتصال: ' + err.message);
-    }
-  }
+      <div class="form-group">
+        <label class="form-label">كلمة المرور</label>
+        <input type="password" class="form-input" placeholder="••••••••" required />
+      </div>
 
-  // 4. دالة التبديل بين التبويبات
-  function switchTab(tab) {
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const tabs = document.querySelectorAll('.tab-btn');
+      <button type="submit" class="btn-submit">تسجيل الدخول ➔</button>
+    </form>
 
-    if (tab === 'login') {
-      loginForm.classList.add('active');
-      signupForm.classList.remove('active');
-      tabs[0].classList.add('active');
-      tabs[1].classList.remove('active');
-    } else {
-      signupForm.classList.add('active');
-      loginForm.classList.remove('active');
-      tabs[1].classList.add('active');
-      tabs[0].classList.remove('active');
-    }
-  }
+    <!-- نموذج إنشاء حساب جديد -->
+    <form id="register-form" style="display: none;" onsubmit="handleAuth(event, 'register')">
+      <div class="form-group">
+        <label class="form-label">الاسم أو اللقب باللعبة</label>
+        <input type="text" class="form-input" placeholder="مثال: اللاعب الخارق" required />
+      </div>
 
-  // 5. دالة التسجيل العادي (بالبريد وكلمة المرور)
-  async function handleAuth(e, type) {
-    e.preventDefault();
-    const email = e.target.querySelector('input[type="email"], input[type="text"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
+      <div class="form-group">
+        <label class="form-label">رقم الجوال</label>
+        <input type="tel" class="form-input" placeholder="05xxxxxxxx" required />
+      </div>
 
-    if (type === 'signup') {
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
-      if (error) alert(error.message);
-      else alert('تم إنشاء الحساب بنجاح! تفقد بريدك لتفعيله.');
-    } else {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) alert(error.message);
-      else {
-        alert('تم تسجيل الدخول بنجاح! 🎉');
-        window.location.href = 'index.html';
+      <div class="form-group">
+        <label class="form-label">كلمة المرور</label>
+        <input type="password" class="form-input" placeholder="أنشئ كلمة مرور قوية" required />
+      </div>
+
+      <button type="submit" class="btn-submit">أنشئ الحساب الآن ✨</button>
+    </form>
+
+    <!-- دخول سريع باستخدام كود الغرفة -->
+    <div class="divider">
+      <span>أو ادخل كلاعب سريع</span>
+    </div>
+
+    <button class="btn-room-direct" onclick="enterRoomDirectly()">
+      <span>🔑</span> إدخال كود غرفة بدون تسجيل
+    </button>
+
+    <div class="auth-footer">
+      بإكمال التسجيل أنت توافق على <a href="#">الشروط والأحكام</a> و <a href="#">سياسة الخصوصية</a>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(type) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      if (type === 'login') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        tabs[0].classList.remove('active');
+        tabs[1].classList.add('active');
       }
     }
-  }
-</script>
 
+    function handleAuth(event, type) {
+      event.preventDefault();
+      alert(type === 'login' ? 'تم تسجيل الدخول بنجاح!' : 'تم إنشاء الحساب بنجاح!');
+      window.location.href = 'index.html';
+    }
+
+    function loginWithSocial(platform) {
+      alert(`جاري توجيهك لتسجيل الدخول عبر ${platform}...`);
+    }
+
+    function enterRoomDirectly() {
+      const code = prompt('أدخل كود الغرفة (مثال: 4821):');
+      if (code) {
+        alert(`جاري الانضمام للغرفة رقم: ${code}`);
+      }
+    }
+  </script>
 </body>
 </html>
