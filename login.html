@@ -318,15 +318,15 @@
       <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
         <div class="form-group">
           <label>البريد الإلكتروني</label>
-          <input type="email" placeholder="example@mail.com" required />
+          <input type="email" id="login-email" placeholder="example@mail.com" required />
         </div>
         <div class="form-group">
           <label>كلمة المرور</label>
-          <input type="password" placeholder="••••••••" required />
+          <input type="password" id="login-password" placeholder="••••••••" required />
         </div>
         <button type="submit" class="btn-submit">دخول 🚀</button>
         <div class="form-footer">
-          <a href="#">نسيت كلمة المرور؟</a>
+          <a href="#" onclick="resetPassword()">نسيت كلمة المرور؟</a>
         </div>
       </form>
 
@@ -334,15 +334,15 @@
       <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
         <div class="form-group">
           <label>اسم المستخدم (الاسم باللعبة)</label>
-          <input type="text" placeholder="مثال: البطل_1" required />
+          <input type="text" id="signup-username" placeholder="مثال: البطل_1" required />
         </div>
         <div class="form-group">
           <label>البريد الإلكتروني</label>
-          <input type="email" placeholder="example@mail.com" required />
+          <input type="email" id="signup-email" placeholder="example@mail.com" required />
         </div>
         <div class="form-group">
           <label>كلمة المرور</label>
-          <input type="password" placeholder="••••••••" required />
+          <input type="password" id="signup-password" placeholder="••••••••" required />
         </div>
         <button type="submit" class="btn-submit">إنشاء الحساب ✨</button>
       </form>
@@ -362,8 +362,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    
-    // 1. إعدادات السيرفر والمفاتيح الخاطة بـ Supabase
+    // 1. إعدادات السيرفر والمفاتيح الخاصة بـ Supabase
     const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
     const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
     
@@ -371,13 +370,12 @@
 
     // 2. التحقق التلقائي عند فتح الصفحة أو عند العودة من التوثيق الخارجي
     supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        console.log('المستخدم مسجّل الدخول:', session.user);
+      if (session && event === 'SIGNED_IN') {
         window.location.href = 'index.html';
       }
     });
 
-    // 3. دالة تسجيل الدخول عبر شبكات التواصل (Google, Twitch, TikTok)
+    // 3. دالة تسجيل الدخول عبر شبكات التواصل
     async function socialLogin(providerName) {
       try {
         const currentUrl = window.location.href.split('#')[0].split('?')[0];
@@ -394,14 +392,6 @@
       } catch (err) {
         alert('حدث خطأ أثناء الاتصال بـ ' + providerName + ': ' + err.message);
       }
-      // التحقق الفوري فور تحميل الصفحة
-window.addEventListener('DOMContentLoaded', async () => {
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) {
-    // إذا كان المستخدم مسجلاً بالفعل، توجه مباشرة للرئيسية
-    window.location.href = 'index.html';
-  }
-});
     }
 
     // 4. دالة التبديل بين التبويبات (تسجيل دخول / حساب جديد)
@@ -426,24 +416,49 @@ window.addEventListener('DOMContentLoaded', async () => {
     // 5. دالة التسجيل بالبريد الإلكتروني وكلمة المرور
     async function handleAuth(e, type) {
       e.preventDefault();
-      const email = e.target.querySelector('input[type="email"]').value;
-      const password = e.target.querySelector('input[type="password"]').value;
 
       if (type === 'signup') {
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) alert(error.message);
-        else alert('تم إنشاء الحساب بنجاح! تفقد بريدك الإلكتروني للتفعيل.');
+        const username = document.getElementById('signup-username').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { username: username }
+          }
+        });
+
+        if (error) {
+          alert('خطأ: ' + error.message);
+        } else {
+          alert('تم إنشاء الحساب بنجاح! تفقد بريدك الإلكتروني للتفعيل.');
+        }
       } else {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) alert(error.message);
-        else {
-          alert('تم تسجيل الدخول بنجاح! 🎉');
+        if (error) {
+          alert('خطأ في تسجيل الدخول: ' + error.message);
+        } else {
           window.location.href = 'index.html';
         }
       }
     }
 
-    // 6. الدخول المباشر للغرفة
+    // 6. إعادة تعيين كلمة المرور
+    async function resetPassword() {
+      const email = prompt('أدخل بريدك الإلكتروني لاستعادة كلمة المرور:');
+      if (email) {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+        if (error) alert('خطأ: ' + error.message);
+        else alert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
+      }
+    }
+
+    // 7. الدخول المباشر للغرفة
     function enterRoomDirectly() {
       const code = prompt('أدخل كود الغرفة (مثال: 4821):');
       if (code) {
