@@ -398,3 +398,301 @@
     .player-score {
       color: #f59e0b;
       font-weight: 900;
+      font-size: 0.9rem;
+    }
+
+    /* Floating WhatsApp Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #25d366;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+      z-index: 1000;
+      transition: transform 0.2s;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.08);
+    }
+
+    /* Responsive / تجاوب الجوال للصفحة الرئيسية */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 16px;
+      }
+
+      .nav-links {
+        display: none; /* إخفاء الروابط العادية في الجوال لترتيب الشريط العلوي */
+      }
+
+      .brand-logo .name {
+        font-size: 1.4rem;
+      }
+
+      .hero {
+        flex-direction: column;
+        padding: 25px 15px;
+        gap: 30px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+        text-align: center;
+      }
+
+      .hero-subtitle {
+        justify-content: center;
+        font-size: 0.95rem;
+      }
+
+      .hero-desc {
+        font-size: 0.98rem;
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-action-main, .btn-action-sec, .btn-rank {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+
+      .hero-mockup {
+        width: 100%;
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .answers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (الشريط العلوي) -->
+  <nav class="navbar">
+    <div class="nav-right">
+      <a href="index.html" class="brand-logo">
+        <span class="icon">🎉</span>
+        <span class="name">فُلّة</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">الرئيسية</a></li>
+        <li><a href="games.html">الألعاب</a></li>
+        <li><a href="#">دخول غرفة</a></li>
+        <li><a href="#">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+    <div class="nav-left">
+      <a href="#" class="btn-outline">🚪 دخول غرفة</a>
+      <a href="login.html" class="btn-primary">👤 تسجيل الدخول</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section (القسم الرئيسي) -->
+  <main class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="highlight">منصة ألعاب جماعية وتفاعلية 🎉</span>
+      </h1>
+      <p class="hero-subtitle">✨ لسنا الوحيدين ولكن نسعى للأفضل</p>
+      
+      <p class="hero-desc">
+        سواء كنت تدير جلسة مع أصحابك، تنظم فعاليات عائلية، أو تصنع محتوى تفاعلي للجمهور: منصة فُلّة هي خيارك الأنسب لجمع الحماس، التحديات، والتسلية في مكان واحد!
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="games.html" class="btn-action-main">🎮 استكشف مكتبة الألعاب</a>
+        <a href="#" class="btn-action-sec">⌨️ ادخل كود الغرفة</a>
+        <a href="#" class="btn-rank">🏆 المتصدرين</a>
+      </div>
+    </div>
+
+    <!-- Mockup Preview (معاينة اللعبة التفاعلية) -->
+    <div class="hero-mockup" id="interactive-demo">
+      <div class="mockup-header">
+        <div class="room-badge">غرفة نشطة #4821</div>
+        <div class="mockup-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <span class="question-tag" id="game-tag">🕵️‍♂️ لعبة: خارج السالفة</span>
+        <div class="question-text" id="question-text">مين اللكاع اللي ما يدري وش السالفة بيننا؟</div>
+      </div>
+
+      <!-- الخيارات التفاعلية -->
+      <div class="answers-grid" id="answers-container">
+        <div class="answer-opt" onclick="selectAnswer(this, true)"><span>أ</span> أحمد</div>
+        <div class="answer-opt" onclick="selectAnswer(this, false)"><span>ب</span> سارة</div>
+      </div>
+
+      <!-- رسالة النتيجة التفاعلية -->
+      <div id="feedback-msg" style="display: none; text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 0.95rem;"></div>
+
+      <!-- قائمة اللاعبين والنقاط -->
+      <div class="players-list">
+        <div class="player-row">
+          <div class="player-info">👑 أنت (اللاعب)</div>
+          <div class="player-score" id="user-score">★ 1200</div>
+        </div>
+        <div class="player-row">
+          <div class="player-info">🎯 عبد الله (المستضيف)</div>
+          <div class="player-score">★ 1500</div>
+        </div>
+      </div>
+
+      <button id="next-btn" onclick="nextQuestion()" style="display: none; width: 100%; margin-top: 15px; padding: 10px; background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 10px; font-weight: bold; cursor: pointer;">السؤال التالي ➔</button>
+    </div>
+  </main>
+
+  <!-- زر واتساب العائم -->
+  <a href="https://wa.me/" target="_blank" class="whatsapp-btn" aria-label="تواصل معنا عبر الواتساب">💬</a>
+
+  <!-- Script التفاعل مع الأسئلة والنقاط -->
+  <script>
+    let score = 1200;
+    let answered = false;
+
+    const questions = [
+      {
+        tag: "🕵️‍♂️ لعبة: خارج السالفة",
+        text: "مين اللكاع اللي ما يدري وش السالفة بيننا؟",
+        answers: [
+          { text: "أحمد", correct: true },
+          { text: "سارة", correct: false }
+        ]
+      },
+      {
+        tag: "🧠 لعبة: أسئلة ذكاء",
+        text: "شيء كلما أخذت منه كِبُر، فما هو؟",
+        answers: [
+          { text: "الحفرة", correct: true },
+          { text: "العمر", correct: false }
+        ]
+      }
+    ];
+
+    let currentQ = 0;
+
+    function selectAnswer(element, isCorrect) {
+      if (answered) return;
+      answered = true;
+
+      const opts = document.querySelectorAll('.answer-opt');
+      opts.forEach(opt => opt.style.cursor = 'default');
+
+      const feedback = document.getElementById('feedback-msg');
+      const scoreDisplay = document.getElementById('user-score');
+
+      if (isCorrect) {
+        element.style.borderColor = '#10b981';
+        element.style.background = 'rgba(16, 185, 129, 0.2)';
+        score += 300;
+        scoreDisplay.innerText = `★ ${score}`;
+        feedback.style.color = '#10b981';
+        feedback.innerText = '🎉 إجابة صحيحة! كسبت +300 نقطة';
+      } else {
+        element.style.borderColor = '#ef4444';
+        element.style.background = 'rgba(239, 68, 68, 0.2)';
+        feedback.style.color = '#ef4444';
+        feedback.innerText = '❌ إجابة خاطئة! حظاً أوفر';
+      }
+
+      feedback.style.display = 'block';
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQ = (currentQ + 1) % questions.length;
+      answered = false;
+
+      const q = questions[currentQ];
+      document.getElementById('game-tag').innerText = q.tag;
+      document.getElementById('question-text').innerText = q.text;
+
+      const container = document.getElementById('answers-container');
+      container.innerHTML = `
+        <div class="answer-opt" onclick="selectAnswer(this, ${q.answers[0].correct})"><span>أ</span> ${q.answers[0].text}</div>
+        <div class="answer-opt" onclick="selectAnswer(this, ${q.answers[1].correct})"><span>ب</span> ${q.answers[1].text}</div>
+      `;
+
+      document.getElementById('feedback-msg').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'none';
+    }
+    
+  </script>
+<!-- مكتبة Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // عند تحميل الصفحة الرئيسية
+  window.addEventListener('DOMContentLoaded', async () => {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    
+    if (session) {
+      // المستخدم مسجل الدخول
+      renderLoggedInUser(session.user);
+    } else {
+      // المستخدم غير مسجل الدخول
+      renderGuestUser();
+    }
+  });
+
+  // عرض بيانات المستخدم وزر تسجيل الخروج
+  function renderLoggedInUser(user) {
+    const navContainer = document.querySelector('.navbar'); // أو العنصر الحاوي لأزرار الهيدر
+    
+    // استخراج اسم المستخدم والصورة (إن وجدت من Google/Twitch)
+    const userName = user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0];
+    const userAvatar = user.user_metadata.avatar_url || 'https://via.placeholder.com/40';
+
+    // استبدال أزرار التسجيل ببروفايل المستخدم وزر الخروج
+    const userProfileHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="${userAvatar}" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ec4899;">
+        <span style="font-weight: bold; color: #fff;">أهلاً، ${userName}</span>
+        <button onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+          تسجيل الخروج
+        </button>
+      </div>
+    `;
+
+    // ضع عنصر البروفايل مكان أزرار الدخول
+    const authBtnArea = document.getElementById('auth-buttons');
+    if (authBtnArea) authBtnArea.innerHTML = userProfileHTML;
+  }
+
+  // دالة تسجيل الخروج
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.reload(); // إعادة تحميل الصفحة للعودة لحالة الزائر
+  }
+</script>
+</body>
+</html>
