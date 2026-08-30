@@ -2,12 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta name="google-site-verification" content="cV7eNb5vbFyJ8W3LQVLgLkkqMiju9Q1TUtyNoKRdXA0" />
-  <!-- وسوم أرشفة جوجل (SEO) -->
   <meta name="description" content="منصة فُلّة للألعاب الجماعية أونلاين - العب خارج السالفة والعجلة العشوائية مع أصحابك وعائلتك مجاناً من الجوال!" />
   <meta name="keywords" content="خارج السالفة, العجلة العشوائية, ألعاب جماعية, ألعاب أونلاين, فلة, ألعاب جوال, saalfa, fulla" />
   <meta name="author" content="Fulla Games" />
 
-  <!-- ظهور الموقع بشكل احترافي عند مشاركته في الواتساب وتويتر -->
   <meta property="og:title" content="منصة فُلّة | ألعاب جماعية أونلاين 🎮" />
   <meta property="og:description" content="تجمع الألعاب الحماسي! العب خارج السالفة والكلمة المفقودة مع أصحابك الآن." />
   <meta property="og:type" content="website" />
@@ -50,6 +48,14 @@
       box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
       margin-bottom: 15px;
       backdrop-filter: blur(10px);
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.03);
+      border-color: rgba(236, 72, 153, 0.8);
     }
 
     .brand-icon {
@@ -178,98 +184,4 @@
     }
 
     .step-num {
-      background: #ec4899;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: auto;
-      padding: 30px 0 10px;
-      color: #64748b;
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="brand-logo">
-      <span class="brand-icon">🎉✨</span>
-      <span class="brand-text">فُلّة | Fulla</span>
-    </div>
-    <p>جمعاتكم ومنافساتكم تصير أحلى وفُلّة أونلاين!</p>
-  </header>
-
-  <main class="games-container">
-    <!-- لعبة خارج السالفة -->
-    <div class="game-card">
-      <div>
-        <div class="game-icon">🕵️‍♂️</div>
-        <h2 class="game-title">خارج السالفة</h2>
-        <p class="game-desc">مين اللكاع اللي ما يدري وش السالفة؟ اكتشفوا الخائن بينكم قبل ما يفوز!</p>
-      </div>
-      <a href="liar.html" class="btn-play">ابدأ اللعب</a>
-    </div>
-
-    <!-- العجلة العشوائية -->
-    <div class="game-card">
-      <div>
-        <div class="game-icon">🎡</div>
-        <h2 class="game-title">عجلة الروليت</h2>
-        <p class="game-desc">مُحتارين مين يبدأ؟ أو مين عليه العقاب؟ دوروا العجلة واخلوا القرار للقدر!</p>
-      </div>
-      <a href="wheel.html" class="btn-play">تدوير العجلة</a>
-    </div>
-
-    <!-- لعبة الكلمة المفقودة -->
-    <div class="game-card">
-      <div>
-        <div class="game-icon">🧩</div>
-        <h2 class="game-title">الكلمة المفقودة</h2>
-        <p class="game-desc">خمن الكلمة المفقودة التي تكمل المعنى بأسرع وقت واجمع النقاط!</p>
-      </div>
-      <a href="missing-word.html" class="btn-play">ابدأ التحدي</a>
-    </div>
-
-    <!-- لعبة تطابق الصور -->
-    <div class="game-card">
-      <div>
-        <div class="game-icon">🧠⚡</div>
-        <h2 class="game-title">تطابق الصور</h2>
-        <p class="game-desc">تحدى ذاكرتك! جد كل زوج من الصور المتطابقة بأقل عدد من المحاولات وأسرع وقت.</p>
-      </div>
-      <a href="image-match.html" class="btn-play">ابدأ التحدي</a>
-    </div>
-  </main>
-
-  <section class="how-to-play">
-    <h2>كيف تبدأ اللعب؟ 🤔</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <p>اختر اللعبة واضغط زر الدخول</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <p>أنشئ غرفة وشارِك الكود مع أصحابك</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <p>ادخلوا من الجوالات واستمتعوا بالفُلّة!</p>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p>منصة فُلّة | Fulla 🚀 | صُممت بحب للأوقات الممتعة</p>
-  </footer>
-
-</body>
-</html>
+      background: #ec
