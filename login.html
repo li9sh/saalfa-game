@@ -362,6 +362,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+    
     // 1. إعدادات السيرفر والمفاتيح الخاطة بـ Supabase
     const SUPABASE_URL = 'https://uhwlxlejpzkyomimuepy.supabase.co'; 
     const SUPABASE_ANON_KEY = 'sb_publishable_1yTJSFyNBoNUrBQ5pCApGA_gWkB5ugD';
@@ -393,6 +394,14 @@
       } catch (err) {
         alert('حدث خطأ أثناء الاتصال بـ ' + providerName + ': ' + err.message);
       }
+      // التحقق الفوري فور تحميل الصفحة
+window.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session) {
+    // إذا كان المستخدم مسجلاً بالفعل، توجه مباشرة للرئيسية
+    window.location.href = 'index.html';
+  }
+});
     }
 
     // 4. دالة التبديل بين التبويبات (تسجيل دخول / حساب جديد)
